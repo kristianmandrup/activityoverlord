@@ -1,0 +1,10 @@
+module.exports.adapters = {
+
+  // Mongo DB
+  mongo: {
+    module   : 'sails-mongo',
+    host     : 'localhost',
+    port     : 27017,
+    database : ( ( process.env.NODE_ENV === 'test' ) ? 'sails-test' : 'sails' )
+  }
+}

@@ -48,18 +48,19 @@ module.exports = {
       user.save(function(err, user) {
         if (err) return next(err);
 
-      // add the action attribute to the user object for the flash message.
-      user.action = " signed-up and logged-in."
+        console.log("This is what user looks like after creation: ", user);
 
-      // Let other subscribed sockets know that the user was created.
-      User.publishCreate(user);
+        // Let the index page know that a user was created.
+        User.publishCreate({
+          user: user
+        });
 
         // After successfully creating the user
         // redirect to the show action
         // From ep1-6: //res.json(user); 
 
         res.redirect('/user/show/' + user.id);
-      });
+      });    
     });
   },
 
@@ -102,7 +103,6 @@ module.exports = {
 
   // process the info from edit view
   update: function(req, res, next) {
-
     if (req.session.User.admin) {
       var userObj = {
         name: req.param('name'),
@@ -172,6 +172,27 @@ module.exports = {
       // html over the socket.
       res.send(200);
     });
+  },
+
+  subscribe: function(req, res) {
+
+    User.find(function foundUsers(err, users) {
+      if (err) return next(err);
+
+      User.subscribe(req.socket);
+      User.subscribe(req.socket, users);
+
+
+      res.send(200);
+    });
+
+    // console.log("The requested socket is: ", req.socket.id);
+    // console.log("Making it here");
+
+    // User.subscribe(req.socket);
+    // // User.subscribe(req.socket, "5220fa7b8764043122000001");
+    // res.send(200);
+
   }
 
 };

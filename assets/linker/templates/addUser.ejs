@@ -1,10 +1,11 @@
 <tr data-id="<%- user.id %>" data-model="user">
+		<tr data-id="<%- user.id %>" data-model="user">
 			<% if (user.online) { %>
 				<td><img src="./images/icon-online.png"></td>
 			<% } else { %>
 				<td> <img src="./images/icon-offline.png"></td>
 			<% } %>
-			<td><%- user.id %></td>
+			<td><%= user.id %></td>
 			<td><%- user.name %></td>
 			<td><%- user.title %></td>
 			<td><%- user.email %></td>

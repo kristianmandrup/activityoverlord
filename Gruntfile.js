@@ -170,11 +170,11 @@ module.exports = function (grunt) {
 
     jst: {
       dev: {
-        options: {
-          templateSettings: {
-            interpolate: /\{\{(.+?)\}\}/g
-          }
-        },
+        // options: {
+        //   // templateSettings: {
+        //   //    // interpolate: /\{\{(.+?)\}\}/g
+        //   // }
+        // },
         files: {
           '.tmp/public/jst.js': templateFilesToInject
         }

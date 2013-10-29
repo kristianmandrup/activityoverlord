@@ -18,6 +18,7 @@
 
   socket.on('connect', function socketConnected() {
 
+
     console.log("This is from the connect: ", this.socket.sessionid);
 
     // Listen for the socket 'message'
@@ -63,7 +64,9 @@
 
 );
 
+
 // This function routes the message based upon the model which issued it
+
 function cometMessageReceivedFromServer(message) {
 
   console.log("Here's the message: ", message);
@@ -90,10 +93,53 @@ function displayFlashActivity(message) {
 function updateUserInDom(userId, message) {
 
   // What page am I on?
+=======
+  // Looks like this one is an update about a user
+  if (message.model === 'user' &&
+    message.verb === 'update') {
+
+    var userId = message.id
+    var changes = message.data;
+    updateUserInDom(userId, changes, message);
+    // console.log("Changes: ", changes);
+  }
+
+  if (message.model === 'user' &&
+      message.verb === 'create') {
+
+      // var addedUser = message.data.user;
+      // UserIndexPage.addUser(addedUser);
+
+      var userId = message.id;
+      var addedUser = message.data.user;
+      updateUserInDom(userId, addedUser, message);
+ 
+    }
+
+  if (message.model === 'user' &&
+      message.verb === 'destroy') {
+
+      var userId = message.id;
+
+      // Should I be doing this?  Maybe create an object and pass it down.
+      var changes = "";
+      // UserIndexPage.destroyUser(destroyedUser);
+      updateUserInDom(userId, null, message);
+
+      // console.log(destroyedUser);
+      // console.log("Got to the comet message");
+ 
+    }
+}
+
+function updateUserInDom(userId, changes, message) {
+  // Get the page we're on
+>>>>>>> 9c86238335c547ca32ea0492d5aba1c1208538de
   var page = document.location.pathname;
 
   // Strip trailing slash if we've got one
   page = page.replace(/(\/)$/, '');
+<<<<<<< HEAD
   
   // Route to the appropriate user update handler based on which page you're on
   switch (page) {
@@ -111,6 +157,17 @@ function updateUserInDom(userId, message) {
         UserIndexPage.addUser(message);
       }
       // This is a message coming publishDestroy
+=======
+  console.log('were on page: ', page);
+
+  // Route to the appropriate user update handler based on the current page
+  switch (page) {
+    case '/user':
+      UserIndexPage.updateUser(userId, changes);
+      if(message.verb === 'create') {
+        UserIndexPage.addUser(changes);
+      }
+>>>>>>> 9c86238335c547ca32ea0492d5aba1c1208538de
       if(message.verb === 'destroy') {
         UserIndexPage.destroyUser(userId);
       }
@@ -120,6 +177,7 @@ function updateUserInDom(userId, message) {
 
 /////////////////////////////////////////////////
 // User index page DOM manipulation logic
+<<<<<<< HEAD
 // (i.e. backbone-style view)
 /////////////////////////////////////////////////
 var UserIndexPage = {
@@ -127,6 +185,15 @@ var UserIndexPage = {
   // Update the User, in this case their login status
   updateUser: function(id, message) {
     if (message.data.loggedIn) {
+=======
+// (i.e. backbone view)
+/////////////////////////////////////////////////
+var UserIndexPage = {
+
+  // Logic on how to update a user on the user index page
+  updateUser: function(id, changes) {
+    if (changes.loggedIn) {
+>>>>>>> 9c86238335c547ca32ea0492d5aba1c1208538de
       var $userRow = $('tr[data-id="' + id + '"] td img').first();
       $userRow.attr('src', "/images/icon-online.png");
     } else {
@@ -135,6 +202,7 @@ var UserIndexPage = {
     }
   },
 
+<<<<<<< HEAD
   // Add a user to the list of users in the User Administration Page
   addUser: function(user) {
 
@@ -149,12 +217,33 @@ var UserIndexPage = {
     $( 'tr:last' ).after(
       
       // This is the path to the templates file
+=======
+  addUser: function(user) {
+    // var template = _.template(
+  //    $( JST.addUserIt ).html()
+  //  );
+  var obj = {
+    user: user,
+    _csrf: window.overlord.csrf || ''
+  };
+
+  // This is the path to the templates file
+    $( 'tr:last' ).after(
+      
+>>>>>>> 9c86238335c547ca32ea0492d5aba1c1208538de
       JST['assets/linker/templates/addUser.ejs']( obj )
     );
   },
 
+<<<<<<< HEAD
   // Remove the user from the User Administration Page
   destroyUser: function(id) {
     $('tr[data-id="' + id + '"]').remove();
   }
 }
+=======
+  destroyUser: function(id) {
+    $('tr[data-id="' + id + '"]').remove();
+  }
+};
+>>>>>>> 9c86238335c547ca32ea0492d5aba1c1208538de
